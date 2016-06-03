@@ -1,2 +1,2 @@
-# GraduantoQuest
-Web App de Questionário online destinados a graduando de qualquer curso, Simulado de Prova.
+# GraduandoQuest
+Web App de Questionário online destinados a graduandos de qualquer curso, Simulado de Prova.
