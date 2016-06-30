@@ -1,0 +1,44 @@
+link(rel='import', href='/bower_components/app-elements/app-elements.html')
+link(rel='import', href='/bower_components/iron-icons/iron-icons.html')
+link(rel='import', href='/bower_components/iron-form/iron-form.html')
+link(rel='import', href='/bower_components/paper-button/paper-button.html')
+link(rel='import', href='/bower_components/paper-input/paper-input.html')
+
+dom-module(id='login-page')
+    style(include='iron-flex iron-flex-alignment').
+        .mh400 {
+            min-height: 400px;
+        }
+
+    template
+        paper-material(elevation=2)
+            div(class='layout horizontal center-justified mh400')
+                div(class='layout vertical center-justified')
+                    form(is='iron-form', id='login-form', method='post', action='/api/auth/login', on-iron-form-response='onResponse')
+                        paper-input(type='email', name='email', label='Endereço de E-Mail', required)
+                        paper-input(type='password', name='password', label='Senha', required)
+                        paper-button Esqueceu sua Senha?
+                        paper-button(on-tap='onSubmit', raised='') Entrar
+
+    script.
+        Polymer({
+            is: 'login-page',
+            onSubmit: function () {
+                document.getElementById('login-form').submit();
+            },
+            onResponse: function (event) {
+                var resp = event.detail.response;
+
+                if (resp.success) {
+                    this.parentNode.route.path = '/aluno';
+                }
+            }
+        })
+
+dom-module(id='register-page')
+    template
+        div.
+            Register Page
+
+    script.
+        Polymer({is: 'register-page'})

@@ -1,0 +1,96 @@
+link(rel='import', href='/bower_components/polymer/polymer.html')
+link(rel='import', href='/bower_components/iron-pages/iron-pages.html')
+link(rel='import', href='/bower_components/iron-flex-layout/iron-flex-layout-classes.html')
+link(rel='import', href='./auth.html')
+link(rel='import', href='./home.html')
+link(rel='import', href='./sobre.html')
+link(rel='import', href='./aluno.html')
+link(rel='import', href='./professor.html')
+
+dom-module(id='graduando-quest', assetpath='/')
+    style.
+        app-header {
+            background-color: #00897B;
+            color: #fff;
+        }
+
+        .inherit {
+            color: inherit;
+            background-color: inherit;
+            text-decoration: inherit;
+        }
+
+    template
+        app-location(route='{{route}}')
+        app-route(route='{{route}}', pattern='/:page', data='{{rootData}}', tail='{{rootTail}}')
+
+        app-drawer-layout(fullbleed)
+            app-drawer
+                app-toolbar
+                paper-menu
+                    template(is='dom-repeat', items='[[drawerItems]]')
+                        paper-item {{item.name}}
+            app-header-layout
+                app-header(reveals)
+                    app-toolbar
+                        paper-icon-button(icon='menu', drawer-toggle='')
+                        div(title) GraduandoQuest
+                        a(href='/', tabindex='-1', class='inherit')
+                            paper-button Ínicio
+                        template(is='dom-if', if='{{auth.logged}}')
+                            a(href='/aluno', tabindex='-1', class='inherit')
+                                paper-button Aluno
+                            a(href='/professor', tabindex='-1', class='inherit')
+                                paper-button Professor
+                        template(is='dom-if', if='{{!auth.logged}}')
+                            a(href='/login', tabindex='-1', class='inherit')
+                                paper-button Entrar
+                        a(href='/sobre', tabindex='-1', class='inherit')
+                            paper-button Sobre
+
+                iron-pages(selected='[[rootData.page]]', attr-for-selected='name', on-iron-select='pageChanged')
+                    home-page(name='', route='[[rootTail]]', data='{{rootData}}')
+                    login-page(name='login', route='[[rootTail]]')
+                    register-page(name='register', route='[[rootTail]]')
+                    sobre-page(name='sobre', route='[[rootTail]]', data='{{rootData}}')
+                    aluno-page(name='aluno', route='[[rootTail]]', data='{{rootData}}')
+                    professor-page(name='professor', route='[[rootTail]]', data='{{rootData}}')
+
+    script.
+        Polymer({
+            is: 'graduando-quest',
+            properties: {
+                drawerItems: {
+                    type: Object,
+                    value: [{name: 'Teste'}],
+                    notify: true,
+                },
+                auth: {
+                    type: Object,
+                    notify: true,
+                    value: {
+                        logged: false,
+                        key: '',
+                        user: {},
+                    }
+                }
+            },
+            pageChanged: function (e, page) {
+                // Home Page
+                if (page.item.name == '' || page.item.name === undefined) {
+                    this.drawerItems = []
+                }
+
+                if (page.item.name == 'aluno') {
+                    this.drawerItems = [{name: 'Teste Aluno'}]
+                }
+
+                if (page.item.name == 'professor') {
+                    this.drawerItems = [{name: 'Teste Professor'}]
+                }
+
+                if (page.item.name == 'sobre') {
+                    this.drawerItems = [{name: 'Teste Sobre'}]
+                }
+            }
+        })
